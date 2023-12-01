@@ -8,17 +8,24 @@
 .header {
   background: rgb(62, 121, 240);
   color: #f1f1f1;
-  display: flex;
-  justify-content: center;
+  position: fixed;
   top: 0;
   width: 100%;
   text-align: center;
   height: 100px;
 }
 
+.header-content {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
 .select {
   height: fit-content;
   align-self: flex-start;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .card-container {
@@ -29,7 +36,7 @@
   align-items: flex-start;
   align-items: center;
   width: 100vmax;
-  height: 100vh;
+  height: fit-content;
 }
 
 .exam-name {
@@ -42,7 +49,7 @@
   margin: 10px;
   padding: 50px;
   text-align: center;
-  width: 80%;
+  width: 70%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 5px;
 }

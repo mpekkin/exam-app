@@ -14,11 +14,8 @@ function App() {
 
   return (
     <div id='root'>
-      <Header/>
-      <Exam 
-        name={state.exams[state.selectedExam].name}
-        questions={state.exams[state.selectedExam].questions}
-        />
+      <Header />
+      <Exam />
       
     </div>
   )
@@ -28,9 +25,3 @@ export default App
 
 
 
-/*       <div className='card-container'>
-        <div className='exam-name'><ExamName /></div>
-        <QuestionCard/>
-        <IconButton aria-label='add'><AddCircleIcon/></IconButton>
-        <Button variant="contained">Tallenna</Button>
-        </div> */
