@@ -3,7 +3,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Question from "./Question"
 import Option from "./Option"
 import { addOption, deleteOption, editOption } from "./examsSlice"
-import { useAppSelector, useAppDispatch } from "../app/hooks"
+import { useAppDispatch } from "../app/hooks"
 import { OptionItem } from './examsSlice';
 
 
@@ -21,7 +21,7 @@ const QuestionCard:React.FC<ExamProps> = ({ id, text, options }: ExamProps) => {
         const payload = {questionID: id, optionID: optionId}
         dispatch(deleteOption(payload))
     }
-
+    
     const handleEditOption = (optionId: string, newText: string) => {
         const payload = {questionID: id, optionID: optionId, newText: newText}
         dispatch(editOption(payload))

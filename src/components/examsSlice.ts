@@ -27,7 +27,7 @@ export interface examState {
 
 export interface applicationState {
     exams: examState[],
-    selectedExam: number 
+    selectedExam: string 
 }
 
 
@@ -103,15 +103,27 @@ const initialState: applicationState =
     ],
 
 }],
-selectedExam: 0
+selectedExam: ""
 
 }
-export const examsSlice: any = createSlice({
+
+export const getSelectedExam = (state: applicationState): examState | undefined => 
+    state.exams.find((exam) => exam.id === state.selectedExam)
+
+
+export const examsSlice = createSlice({
     name: "exam",
     initialState,
     reducers: {
+
+        updateExams: (state, action) => {
+            state.exams = action.payload
+            state.selectedExam = ""
+        },
         addOption: (state, action: PayloadAction<string>) => {
-            const question = state.exams[state.selectedExam].questions.find((q) => q.id === action.payload)
+            const question = getSelectedExam(state)?.questions
+                .find((q) => q.id === action.payload)
+
             if (question) {
                 const newOption = {id: uuid(), text:""}
                 question.options.push(newOption)
@@ -119,70 +131,76 @@ export const examsSlice: any = createSlice({
         },
         editOption: (state, action: PayloadAction<{questionID: string; optionID: string; newText: string}>) => {
             const { questionID, optionID, newText } = action.payload
-            console.log("q:", questionID, "o:", optionID, "text:", newText);
-            const question = state.exams[state.selectedExam].questions.find((q) => q.id === questionID)
+            
+            const question = getSelectedExam(state)?.questions
+                .find((q) => q.id === questionID)
+
             if (question) {
-            const option = question.options.find((op) => op.id === optionID)
-            if (option) {
-            option.text = newText            
-            }}
+                const option = question.options.find((op) => op.id === optionID)
+
+                if (option) {
+                    option.text = newText            
+                }
+            }
         },
         deleteOption: (state, action: PayloadAction<{questionID: string; optionID: string}>) => {
-            const { questionID, optionID } = action.payload          
-            const question = state.exams[state.selectedExam].questions.find((q) => q.id === questionID)
+            const { questionID, optionID } = action.payload
+
+            const question = getSelectedExam(state)?.questions
+                .find((q) => q.id === questionID)
+
             if (question) {               
                 question.options = question.options.filter(op => op.id !== optionID)
-               
             }
         },
         addQuestion: (state) => {
             const newQuestionCard = {id: uuid(), text: "", options:[]}
-            state.exams[state.selectedExam].questions.push(newQuestionCard)
+            getSelectedExam(state)?.questions.push(newQuestionCard)
         },
         editQuestion: (state, action: PayloadAction<{questionID: string; newText: string}>) => {
             const { questionID, newText } = action.payload
-            console.log("q:", questionID, "text:", newText);
-            const question = state.exams[state.selectedExam].questions.find((q) => q.id === questionID)
+           
+            const question = getSelectedExam(state)?.questions.find((q) => q.id === questionID)
+
             if (question) {
             question.text = newText
             }
         },
         deleteQuestion: (state,action: PayloadAction<string>) => {
-            const question = state.exams[state.selectedExam].questions.find((q) => q.id === action.payload)
-            if (question) {
-                state.exams[state.selectedExam].questions = state.exams[state.selectedExam].questions.filter((q) => q.id !== question.id)
+            const exam = getSelectedExam(state)
+            const question = exam?.questions.find((q) => q.id === action.payload)
+            if (question && exam) {
+                exam.questions = exam.questions.filter((q) => q.id !== question.id)
             }
         },
         changeSelectedExam: (state, action: PayloadAction<string>) => {
-            const selected = state.exams.map(exam => { 
-                return exam.name}).indexOf(action.payload)
-            state.selectedExam = selected
-                
-                
+            state.selectedExam = action.payload     
         },
         addNewExam: (state) => {
-            const newExam: examState = {name: "", id: uuid(), questions: []}
+            const newExamId = uuid()
+            const newExam: examState = {name: "", id: newExamId, questions: []}
             state.exams.push(newExam)
-            state.selectedExam = state.exams.length - 1 
+            state.selectedExam = newExamId
         },
         editExamName: (state, action) => {
-            state.exams[state.selectedExam].name = action.payload
+            const exam = getSelectedExam(state)
+
+            if (exam) {
+                exam.name = action.payload
+            }
+            
         },
         deleteExam: (state) => {
-            const examId = state.exams[state.selectedExam].id
-            if (confirm(`Haluatko varmasti poistaa tentin ${state.exams[state.selectedExam].name} ?`)) {
-               state.exams = state.exams.filter((e) => e.id !== examId)
-                state.selectedExam = 0
-              } else {
-                
-              }
-            
-            
+            const exam = getSelectedExam(state)
+            if (exam && confirm(`Haluatko varmasti poistaa tentin ${exam.name} ?`)) {
+                state.exams = state.exams.filter((e) => e.id !== exam.id)
+                state.selectedExam = ""
+            } 
         }
     }
 })
 
 export const selectExam = (state: RootState) => state.exam
-export const { addOption, editOption, deleteOption, addQuestion, editQuestion, deleteQuestion, changeSelectedExam, addNewExam, editExamName, deleteExam } = examsSlice.actions
+export const { addOption, editOption, deleteOption, addQuestion, editQuestion, deleteQuestion, changeSelectedExam, addNewExam, editExamName, deleteExam, updateExams } = examsSlice.actions
 export default examsSlice.reducer
 

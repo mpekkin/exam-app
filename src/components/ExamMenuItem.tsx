@@ -4,12 +4,12 @@ interface ExamProps {
     id: string
   }
   
-const ExamMenuItem:React.FC<ExamProps> = ({ examName }: ExamProps) => {
+const ExamMenuItem:React.FC<ExamProps> = ({ examName, id }: ExamProps) => {
 
     return (
 
         <option
-          value={examName}
+          value={id}
           >
             {examName}
         </option>

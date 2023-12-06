@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
 import examsReducer from "../components/examsSlice"
-import examSlice from "../components/examsSlice"
 
 export const store = configureStore({
   reducer: {
