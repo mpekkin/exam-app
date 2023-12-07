@@ -8,6 +8,13 @@ const Header = () => {
   const state: applicationState = useAppSelector(selectExam)
   const dispatch = useAppDispatch()
 
+  interface LoginDetails {
+    username: string,
+    password: string
+  }
+
+  const loginData: LoginDetails = JSON.parse(localStorage.getItem("login_details") || "")
+
   const handleSaveAllChanges = async () => {
     const newJSON = JSON.stringify(state.exams)
     try {
@@ -15,6 +22,8 @@ const Header = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Username": loginData.username,
+          "Password": loginData.password
         },
         body: newJSON,
       })

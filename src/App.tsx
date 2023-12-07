@@ -4,6 +4,7 @@ import Exam from './components/Exam'
 import { useAppSelector, useAppDispatch } from "./app/hooks"
 import { selectExam, updateExams } from './components/examsSlice'
 import { useEffect, useState } from 'react'
+import Login from './components/Login'
 
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
   const state: any = useAppSelector(selectExam)
   const dispatch = useAppDispatch()
 
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
@@ -30,6 +31,9 @@ function App() {
   }, [])
 
   
+  if(!isLoggedIn) {
+    return (<Login setIsLoggedIn={setIsLoggedIn}/>)
+  }
 
   return (
     <div id='root'>
