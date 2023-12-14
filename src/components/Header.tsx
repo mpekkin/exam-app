@@ -36,12 +36,14 @@ const Header = () => {
     
   }
 
+
+
     return (
         <div className='header'>
           <div className="header-content">
             <div className="select">
               <select 
-                onChange={(event) => dispatch(changeSelectedExam(event.currentTarget.value))}>
+                onChange ={(event) => dispatch(changeSelectedExam(event.currentTarget.value))}>
                   <option value="">--Valitse tentti--</option>
                 {state.exams.map((exam: examState, index: number) => 
                 <ExamMenuItem examName={exam.name} id={exam.id} key={`exam-menu-item-${index}`}/>)}

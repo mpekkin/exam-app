@@ -14,6 +14,10 @@ const Exam = () => {
     const state: applicationState = useAppSelector(selectExam)
     const dispatch = useAppDispatch()
     const exam = getSelectedExam(state)
+    
+    console.log(state);
+    
+        
 
     if (!exam) {
         return null

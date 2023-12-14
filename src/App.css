@@ -8,16 +8,18 @@
 .header {
   background: rgb(62, 121, 240);
   color: #f1f1f1;
-  position: fixed;
   top: 0;
   width: 100%;
   text-align: center;
   height: 100px;
 }
 
+
+
 .header-content {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-direction: row;
 }
 
@@ -29,6 +31,7 @@
 }
 
 .card-container {
+  margin-top: 100px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;

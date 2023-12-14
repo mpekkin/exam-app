@@ -6,7 +6,7 @@ import { editOption } from "./examsSlice"
 
 interface ExamProps {
     value: string
-    id: string
+    id: number
     handleDelete: Function
     handleEdit: Function
   }

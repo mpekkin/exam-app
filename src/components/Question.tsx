@@ -8,7 +8,7 @@ import { useAppDispatch } from "../app/hooks"
 
 interface ExamProps {
     value: string
-    id: string
+    id: number
   }
 
 const Question:React.FC<ExamProps> = ({ value, id }: ExamProps) => {

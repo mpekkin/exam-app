@@ -2,14 +2,14 @@ import './App.css'
 import Header from './components/Header'
 import Exam from './components/Exam'
 import { useAppSelector, useAppDispatch } from "./app/hooks"
-import { selectExam, updateExams } from './components/examsSlice'
+import { applicationState, selectExam, updateExams } from './components/examsSlice'
 import { useEffect, useState } from 'react'
 import Login from './components/Login'
 
 
 function App() {
 
-  const state: any = useAppSelector(selectExam)
+  const state: applicationState = useAppSelector(selectExam)
   const dispatch = useAppDispatch()
 
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -22,6 +22,8 @@ function App() {
           throw new Error(`This is an HTTP error: The status is ${response.status}`)
         }
        let actualData = await response.json()
+       console.log(actualData);
+       
        dispatch(updateExams(actualData)) 
       } catch(err) {
         console.log(err); 
@@ -31,9 +33,9 @@ function App() {
   }, [])
 
   
-  if(!isLoggedIn) {
-    return (<Login setIsLoggedIn={setIsLoggedIn}/>)
-  }
+  //if(!isLoggedIn) {
+    //return (<Login setIsLoggedIn={setIsLoggedIn}/>)
+  //}
 
   return (
     <div id='root'>

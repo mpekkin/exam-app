@@ -1,7 +1,7 @@
 
 interface ExamProps {
     examName: string
-    id: string
+    id: number
   }
   
 const ExamMenuItem:React.FC<ExamProps> = ({ examName, id }: ExamProps) => {

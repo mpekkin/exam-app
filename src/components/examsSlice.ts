@@ -8,107 +8,39 @@ export function uuid(): string {
 
 
 export interface QuestionItem {
-    id: string
+    id: number | null 
     text: string
     options: OptionItem[]
 }
 
 export interface OptionItem {
-    id: string
+    id: number | null | string
     text: string
+    is_correct: boolean
 }
 
 export interface examState {
     name: string,
-    id: string,
+    id: number | null,
     questions: QuestionItem[]
     
 }
 
 export interface applicationState {
     exams: examState[],
-    selectedExam: string 
+    selectedExam: number | null 
 }
 
 
 const initialState: applicationState = 
 
-{ exams:[{
-    name: "Maantieto",
-    id: uuid(),
-    questions: [
-        {
-            id: uuid(),
-            text: "Onko maapallo pyöreä?",
-            options: [
-                {
-                    id: uuid(),
-                    text: "Kyllä"
-                },
-                {
-                    id: uuid(),
-                    text: "100"
-                }
-            ]
-        },
-        {
-            id: uuid(),
-            text: "Mikä on Suomen pääkaupunki?",
-            options: [
-                {
-                    id: uuid(),
-                    text: "Tampere"
-                },
-                {
-                    id: uuid(),
-                    text: "Helsinki"
-                }
-            ]
-        }
-    ]
-
-},
-{
-    name: "Biologia",
-    id: uuid(),
-    questions: [
-        {
-            id: uuid(),
-            text: "Onko kettu nisäkäs?",
-            options: [
-                {
-                    id: uuid(),
-                    text: "Kyllä"
-                },
-                {
-                    id: uuid(),
-                    text: "Ehkä"
-                }
-            ]
-        },
-        {
-            id: uuid(),
-            text: "Mikä hauki on?",
-            options: [
-                {
-                    id: uuid(),
-                    text: "Kala"
-                },
-                {
-                    id: uuid(),
-                    text: "Ei kala"
-                }
-            ]
-        }
-    ],
-
-}],
-selectedExam: ""
+{ exams:[],
+selectedExam: null
 
 }
 
 export const getSelectedExam = (state: applicationState): examState | undefined => 
-    state.exams.find((exam) => exam.id === state.selectedExam)
+    state.exams.find((exam) => exam.id === state.selectedExam)   
 
 
 export const examsSlice = createSlice({
@@ -118,18 +50,18 @@ export const examsSlice = createSlice({
 
         updateExams: (state, action) => {
             state.exams = action.payload
-            state.selectedExam = ""
+            state.selectedExam = 1
         },
-        addOption: (state, action: PayloadAction<string>) => {
+        addOption: (state, action: PayloadAction<any>) => {
             const question = getSelectedExam(state)?.questions
                 .find((q) => q.id === action.payload)
 
             if (question) {
-                const newOption = {id: uuid(), text:""}
+                const newOption: OptionItem = {id: uuid(), text:"", is_correct: false}
                 question.options.push(newOption)
             }
         },
-        editOption: (state, action: PayloadAction<{questionID: string; optionID: string; newText: string}>) => {
+        editOption: (state, action: PayloadAction<{questionID: number; optionID: number; newText: string}>) => {
             const { questionID, optionID, newText } = action.payload
             
             const question = getSelectedExam(state)?.questions
@@ -143,7 +75,7 @@ export const examsSlice = createSlice({
                 }
             }
         },
-        deleteOption: (state, action: PayloadAction<{questionID: string; optionID: string}>) => {
+        deleteOption: (state, action: PayloadAction<{questionID: number; optionID: number}>) => {
             const { questionID, optionID } = action.payload
 
             const question = getSelectedExam(state)?.questions
@@ -154,10 +86,10 @@ export const examsSlice = createSlice({
             }
         },
         addQuestion: (state) => {
-            const newQuestionCard = {id: uuid(), text: "", options:[]}
+            const newQuestionCard: QuestionItem = {id: null, text: "", options:[]}
             getSelectedExam(state)?.questions.push(newQuestionCard)
         },
-        editQuestion: (state, action: PayloadAction<{questionID: string; newText: string}>) => {
+        editQuestion: (state, action: PayloadAction<{questionID: number; newText: string}>) => {
             const { questionID, newText } = action.payload
            
             const question = getSelectedExam(state)?.questions.find((q) => q.id === questionID)
@@ -166,7 +98,7 @@ export const examsSlice = createSlice({
             question.text = newText
             }
         },
-        deleteQuestion: (state,action: PayloadAction<string>) => {
+        deleteQuestion: (state,action: PayloadAction<any>) => {
             const exam = getSelectedExam(state)
             const question = exam?.questions.find((q) => q.id === action.payload)
             if (question && exam) {
@@ -174,10 +106,10 @@ export const examsSlice = createSlice({
             }
         },
         changeSelectedExam: (state, action: PayloadAction<string>) => {
-            state.selectedExam = action.payload     
+            state.selectedExam = Number(action.payload) 
         },
         addNewExam: (state) => {
-            const newExamId = uuid()
+            const newExamId = 86
             const newExam: examState = {name: "", id: newExamId, questions: []}
             state.exams.push(newExam)
             state.selectedExam = newExamId
@@ -194,7 +126,7 @@ export const examsSlice = createSlice({
             const exam = getSelectedExam(state)
             if (exam && confirm(`Haluatko varmasti poistaa tentin ${exam.name} ?`)) {
                 state.exams = state.exams.filter((e) => e.id !== exam.id)
-                state.selectedExam = ""
+                state.selectedExam = null
             } 
         }
     }
