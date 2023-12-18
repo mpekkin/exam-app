@@ -1,23 +1,28 @@
 import { TextField, Checkbox } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete'
 import IconButton from "@mui/material/IconButton"
-import { useAppDispatch } from "../app/hooks"
-import { editOption } from "./examsSlice"
 
 interface ExamProps {
     value: string
     id: number
     handleDelete: Function
     handleEdit: Function
+    handleCorrect: Function
+    correct: boolean
   }
 
 
-const Option:React.FC<ExamProps> = ({ value, id, handleDelete, handleEdit }: ExamProps) => {
+const Option:React.FC<ExamProps> = ({ value, id, handleDelete, handleEdit, correct, handleCorrect }: ExamProps) => {
+
+
 
     return (
 
         <div className="line" >
-        <Checkbox /> 
+        <Checkbox 
+          value={correct}
+          checked={correct? true : false}
+          onClick={() => handleCorrect(!correct, id)} /> 
         <TextField fullWidth multiline
           value={value} 
           key={id}
@@ -27,7 +32,7 @@ const Option:React.FC<ExamProps> = ({ value, id, handleDelete, handleEdit }: Exa
         <IconButton 
           aria-label="delete"
           value={id}
-          onClick={(e) => handleDelete(e.currentTarget.value)}
+          onClick={() => handleDelete(id)}
           >
             <DeleteIcon />
         </IconButton>

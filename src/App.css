@@ -12,9 +12,8 @@
   width: 100%;
   text-align: center;
   height: 100px;
+  position: absolute;
 }
-
-
 
 .header-content {
   display: flex;

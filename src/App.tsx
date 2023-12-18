@@ -22,7 +22,6 @@ function App() {
           throw new Error(`This is an HTTP error: The status is ${response.status}`)
         }
        let actualData = await response.json()
-       console.log(actualData);
        
        dispatch(updateExams(actualData)) 
       } catch(err) {

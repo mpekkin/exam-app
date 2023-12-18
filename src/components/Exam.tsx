@@ -5,6 +5,7 @@ import ExamName from './ExamName';
 import { Button } from '@mui/material';
 import { selectExam, addQuestion, deleteExam, getSelectedExam, applicationState } from "./examsSlice"
 import { useAppSelector, useAppDispatch } from "../app/hooks"
+import { fetchAddQuestion, fetchDeleteExam } from '../API';
 
 
 
@@ -12,13 +13,32 @@ import { useAppSelector, useAppDispatch } from "../app/hooks"
 
 const Exam = () => {
     const state: applicationState = useAppSelector(selectExam)
+
     const dispatch = useAppDispatch()
     const exam = getSelectedExam(state)
     
-    console.log(state);
-    
-        
 
+    const handleAddQuestion = async (examId: number) => {
+        try {
+            const newId: number = await fetchAddQuestion(examId)
+            dispatch(addQuestion(newId)) 
+            } catch (err) {
+                console.error(err)
+            }
+    }
+
+    const handleDeleteExam =  async (examId: number) => {
+        try {
+            if(exam && confirm(`Haluatko varmasti poistaa tentin ${exam.name}?`)) {
+                dispatch(deleteExam(examId))
+                await fetchDeleteExam(examId)
+            }
+        } catch (err){
+            console.error(err)
+        }
+    }
+     
+    
     if (!exam) {
         return null
     }
@@ -26,7 +46,10 @@ const Exam = () => {
     return (
         <div className='card-container'>
             <div className='exam-name'>
-                <ExamName name={exam.name}/>
+                <ExamName 
+                    name={exam.name}
+                    id={exam.id}
+                    />
             </div>
         {exam.questions.map((obj: any) => 
         <QuestionCard
@@ -38,13 +61,13 @@ const Exam = () => {
         
         <IconButton 
             aria-label='add'
-            onClick={() => dispatch(addQuestion())}>
+            onClick={() => handleAddQuestion(exam.id)}>
             <AddCircleIcon/>
         </IconButton>
         <Button 
             variant="outlined" 
             color='error'
-            onClick={() => dispatch(deleteExam())}
+            onClick={() => handleDeleteExam(exam.id)}
             >
             Poista tentti
         </Button>
