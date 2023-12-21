@@ -1,4 +1,4 @@
-import { OptionItem } from '../examsSlice';
+import { OptionItem, answerState } from '../examsSlice';
 import StudentQuestion from './StudentQuestion';
 import StudentOption from './StudentOption';
 
@@ -7,12 +7,13 @@ interface ExamProps {
     text: string
     options: OptionItem[]
     showResults: boolean
-    setShowResults: React.Dispatch<React.SetStateAction<boolean>>
+    studentAnswers: answerState[]
   }
 
-  const StudentQuestionCard:React.FC<ExamProps> = ({ id, text, options, showResults, setShowResults }: ExamProps) => {
+  const StudentQuestionCard:React.FC<ExamProps> = ({ id, text, options, showResults, studentAnswers }: ExamProps) => {
  
 
+    
     return (
         <div className='question-card'>
             <StudentQuestion 
@@ -25,9 +26,10 @@ interface ExamProps {
                     key={option.id}
                     value={option.text} 
                     id={option.id}
+                    questionId={id}
                     correct={option.is_correct}
                     showResults={showResults}
-                    setShowResults={setShowResults}
+                    studentAnswers={studentAnswers}
                 />
             )}
 
