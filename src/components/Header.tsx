@@ -1,10 +1,15 @@
+import { useState } from "react"
 import { fetchAddExam } from "../API"
 import { useAppDispatch, useAppSelector } from "../app/hooks"
 import { selectExam, changeSelectedExam, addNewExam, examState, applicationState } from '../components/examsSlice'
 import ExamMenuItem from "./ExamMenuItem"
 
+interface ExamProps {
+  setStudent: React.Dispatch<React.SetStateAction<boolean>>,
+  student: boolean
+}
 
-const Header = () => {
+const Header: React.FC<ExamProps> = ({setStudent, student}: ExamProps) => {
 
   const state: applicationState = useAppSelector(selectExam)
   const dispatch = useAppDispatch()
@@ -15,6 +20,8 @@ const Header = () => {
   } */
 
   //const loginData: LoginDetails = JSON.parse(localStorage.getItem("login_details") || "")
+
+  
 
   const handleAddNewExam = async () => {
     try {
@@ -27,7 +34,9 @@ const Header = () => {
       }
 }
   
-
+  const handleStudent = () => {
+    setStudent(!student)
+  }
 
 
     return (
@@ -44,6 +53,7 @@ const Header = () => {
           </div>
           <button className="select" onClick={() => handleAddNewExam()}>Uusi tentti</button>
           <h1 className="select">Tentit</h1>
+          <button className="select" onClick={() => handleStudent()}>{student ? "Opettajan näkymä" : "Tee tentti"}</button>
           </div>
         </div>
       )

@@ -5,6 +5,7 @@ import { useAppSelector, useAppDispatch } from "./app/hooks"
 import { applicationState, selectExam, updateExams } from './components/examsSlice'
 import { useEffect, useState } from 'react'
 import Login from './components/Login'
+import StudentExam from './components/student/StudentExam'
 
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
   const state: applicationState = useAppSelector(selectExam)
   const dispatch = useAppDispatch()
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  //const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [student, setStudent] = useState(false)
 
   useEffect(() => {
     const getData = async () => {
@@ -36,9 +38,18 @@ function App() {
     //return (<Login setIsLoggedIn={setIsLoggedIn}/>)
   //}
 
+  if(student) {
+    return (
+      <div id='root'>
+        <Header setStudent={setStudent} student={student}/>
+        <StudentExam />
+      </div>
+    )
+  }
+
   return (
     <div id='root'>
-      <Header />
+      <Header setStudent={setStudent} student={student}/>
       <Exam />
       
     </div>

@@ -26,17 +26,24 @@ export interface examState {
     
 }
 
+export interface answerState {
+    id: number,
+    answer: boolean
+}
+
 export interface applicationState {
     exams: examState[],
-    selectedExam: number | null 
+    selectedExam: number | null ,
+    examAnswer: answerState[]
 }
+
 
 
 const initialState: applicationState = 
 
 { exams:[],
-selectedExam: null
-
+selectedExam: null,
+examAnswer:[]
 }
 
 export const getSelectedExam = (state: applicationState): examState | undefined => 
@@ -137,16 +144,24 @@ export const examsSlice = createSlice({
             }
             
         },
-        deleteExam: (state, action: PayloadAction<number>) => {
-            console.log(action.payload);
-            
+        deleteExam: (state, action: PayloadAction<number>) => {          
             state.exams = state.exams.filter((e) => e.id !== action.payload)
             state.selectedExam = null
+        },
+        addAnswer: (state, action: PayloadAction<{optionID: number; answer: boolean}>) => {           
+            const { optionID, answer } = action.payload
+            const oldAnswer = state.examAnswer.find((option) => option.id === optionID)
+            if(oldAnswer) {
+                oldAnswer.answer = answer
+                return
+            }
+            const newAnswer: answerState = {id: optionID, answer: answer}
+            state.examAnswer.push(newAnswer)           
         }
     }
 })
 
 export const selectExam = (state: RootState) => state.exam
-export const { addOption, editOption, deleteOption, addQuestion, editQuestion, deleteQuestion, changeSelectedExam, addNewExam, editExamName, deleteExam, updateExams, editOptionIsCorrect } = examsSlice.actions
+export const { addOption, editOption, deleteOption, addQuestion, editQuestion, deleteQuestion, changeSelectedExam, addNewExam, editExamName, deleteExam, updateExams, editOptionIsCorrect, addAnswer } = examsSlice.actions
 export default examsSlice.reducer
 

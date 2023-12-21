@@ -8,9 +8,6 @@ import { useAppSelector, useAppDispatch } from "../app/hooks"
 import { fetchAddQuestion, fetchDeleteExam } from '../API';
 
 
-
-
-
 const Exam = () => {
     const state: applicationState = useAppSelector(selectExam)
 
